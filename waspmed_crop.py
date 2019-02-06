@@ -397,6 +397,8 @@ class waspmed_crop_panel(bpy.types.Panel):
     def poll(cls, context):
         try:
             ob = context.object
+            if ob.parent != None:
+                ob = ob.parent
             status = ob.waspmed_prop.status
             is_mesh = ob.type == 'MESH'
             return status == 4 and is_mesh # and not context.object.hide

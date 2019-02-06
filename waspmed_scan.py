@@ -194,7 +194,7 @@ class waspmed_scene_prop(bpy.types.PropertyGroup):
 class add_measure_plane(bpy.types.Operator):
     bl_idname = "object.add_measure_plane"
     bl_label = "Add Circumference"
-    bl_description = ("")
+    bl_description = ("Generate a section plane object in order to evaluate the local circumference")
     bl_options = {'REGISTER', 'UNDO'}
 
     thickness : bpy.props.FloatProperty(
@@ -212,19 +212,19 @@ class add_measure_plane(bpy.types.Operator):
         ob = context.object
         size = ob.dimensions.length
         bpy.ops.mesh.primitive_plane_add(size=size, location=(0, 0, 0))
+        plane = context.object
         bpy.ops.object.modifier_add(type='BOOLEAN')
-        ob.modifiers["Boolean"].object = ob
+        plane.modifiers[-1].object = ob
         bpy.ops.object.modifier_add(type='WIREFRAME')
-        ob.modifiers["Wireframe"].use_boundary = True
-        ob.modifiers["Wireframe"].thickness = self.thickness
-        ob.modifiers["Wireframe"].use_even_offset = False
+        plane.modifiers[-1].use_boundary = True
+        plane.modifiers[-1].thickness = self.thickness
+        plane.modifiers[-1].use_even_offset = False
 
         try:
             mat = bpy.data.materials["Circumference"]
         except:
             mat = bpy.data.materials.new(name="Circumference")
             mat.diffuse_color = (0, 1, .5, 0.8)
-        plane = context.object
         plane.data.materials.append(mat)
         plane.parent = ob
         plane.name = "Circumference"
@@ -234,7 +234,7 @@ class add_measure_plane(bpy.types.Operator):
 class measure_circumference(bpy.types.Operator):
     bl_idname = "object.measure_circumference"
     bl_label = "Measure Circumference"
-    bl_description = ("")
+    bl_description = ("Recompute the circumference of the selected section plane")
     bl_options = {'REGISTER', 'UNDO'}
 
     @classmethod
@@ -313,7 +313,7 @@ class waspmed_next(bpy.types.Operator):
                 return False
             if ob.hide_viewport: #not bpy.context.object.is_visible(bpy.context.scene):
                 return False
-            if ob.type != 'MESH' and ob.parent != None:
+            if ob.parent != None:
                 ob = ob.parent
             if ob.type == 'MESH' and ob.waspmed_prop.status < len(status_list)-1:
                 return True
@@ -445,7 +445,7 @@ class waspmed_back(bpy.types.Operator):
     def execute(self, context):
         ob = context.object
         bpy.ops.object.mode_set(mode='OBJECT')
-        if ob.type == 'LATTICE':
+        if ob.type == 'LATTICE' or "Circumference" in ob.name:
             try:
                 ob.hide_viewport = True
                 ob = context.object.parent
@@ -725,6 +725,8 @@ class waspmed_scan_panel(View3DPaintPanel, bpy.types.Panel):
     def poll(cls, context):
         try:
             ob = context.object
+            if ob.parent != None:
+                ob = ob.parent
             status = ob.waspmed_prop.status
             is_mesh = ob.type == 'MESH'
             return (status < 2 and is_mesh) and not context.object.hide

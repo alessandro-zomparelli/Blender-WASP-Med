@@ -72,6 +72,10 @@ class set_sculpt(bpy.types.Operator):
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
+        ob = context.object
+        if ob.parent != None: ob = ob.parent
+        bpy.context.view_layer.objects.active = ob
+        ob.select_set(True)
         bpy.ops.object.mode_set(mode='SCULPT')
         return {'FINISHED'}
 
@@ -110,6 +114,8 @@ class waspmed_sculpt_panel(View3DPaintPanel, bpy.types.Panel):
     def poll(cls, context):
         try:
             ob = context.object
+            if ob.parent != None:
+                ob = ob.parent
             status = ob.waspmed_prop.status
             is_mesh = ob.type == 'MESH'
             return (status == 2 and is_mesh) and not context.object.hide_viewport

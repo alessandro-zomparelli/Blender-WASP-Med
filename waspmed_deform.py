@@ -259,6 +259,8 @@ class waspmed_deform_panel(bpy.types.Panel):
     def poll(cls, context):
         try:
             ob = context.object
+            if ob.parent != None:
+                ob = ob.parent
             status = ob.waspmed_prop.status
             is_lattice = ob.type == 'LATTICE' and ob.parent != None
             is_mesh = ob.type == 'MESH'
