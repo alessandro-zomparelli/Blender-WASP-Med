@@ -24,8 +24,8 @@ from math import sqrt, radians, pi
 import random, re
 
 
-class crop_geometry(bpy.types.Operator):
-    bl_idname = "object.crop_geometry"
+class OBJECT_OT_wm_crop_geometry(bpy.types.Operator):
+    bl_idname = "object.wm_crop_geometry"
     bl_label = "Crop Geometry"
     bl_description = ("")
     bl_options = {'REGISTER', 'UNDO'}
@@ -65,8 +65,8 @@ class crop_geometry(bpy.types.Operator):
         context.view_layer.objects.active = active_object
         return {'FINISHED'}
 
-class define_crop_planes(bpy.types.Operator):
-    bl_idname = "object.define_crop_planes"
+class OBJECT_OT_wm_define_crop_planes(bpy.types.Operator):
+    bl_idname = "object.wm_define_crop_planes"
     bl_label = "Define Crop Planes"
     bl_description = ("")
     bl_options = {'REGISTER', 'UNDO'}
@@ -231,8 +231,8 @@ class define_crop_planes(bpy.types.Operator):
         ob.select_set(True)
         return {'FINISHED'}
 
-class define_crop_planes_old(bpy.types.Operator):
-    bl_idname = "object.define_crop_planes_old"
+class OBJECT_OT_wm_define_crop_planes_old(bpy.types.Operator):
+    bl_idname = "object.wm_define_crop_planes_old"
     bl_label = "Define Crop Planes"
     bl_description = ("")
     bl_options = {'REGISTER', 'UNDO'}
@@ -387,7 +387,7 @@ class define_crop_planes_old(bpy.types.Operator):
         ob.select_set(True)
         return {'FINISHED'}
 
-class waspmed_crop_panel(bpy.types.Panel):
+class WASPMED_PT_crop(bpy.types.Panel):
     bl_label = "Crop"
     bl_category = "Waspmed"
     bl_space_type = "VIEW_3D"
@@ -407,7 +407,7 @@ class waspmed_crop_panel(bpy.types.Panel):
     def draw(self, context):
         layout = self.layout
         col = layout.column(align=True)
-        col.operator("object.define_crop_planes", text="Setting Crop Planes", icon="SETTINGS")
+        col.operator("object.wm_define_crop_planes", text="Setting Crop Planes", icon="SETTINGS")
         ob = context.object
         if ob.parent != None: ob = ob.parent
         planes = [plane for plane in ob.children if "Plane" in plane.name]
@@ -428,7 +428,7 @@ class waspmed_crop_panel(bpy.types.Panel):
         col.separator()
         col.separator()
         try:
-            col.operator("object.crop_geometry", text="Crop Geometry", icon="MOD_DECIM")
+            col.operator("object.wm_crop_geometry", text="Crop Geometry", icon="MOD_DECIM")
             col.separator()
         except:
             pass
@@ -438,8 +438,8 @@ class waspmed_crop_panel(bpy.types.Panel):
         #col.separator()
         if context.mode == 'OBJECT':
             col.separator()
-            col.operator("object.add_measure_plane", text="Add Measure Plane", icon='MESH_PLANE')
-            col.operator("object.measure_circumference", text="Measure Circumference", icon='DRIVER_DISTANCE')
+            col.operator("object.wm_add_measure_plane", text="Add Measure Plane", icon='MESH_PLANE')
+            col.operator("object.wm_measure_circumference", text="Measure Circumference", icon='DRIVER_DISTANCE')
         col.separator()
         col.operator("screen.region_quadview", text="Toggle Quad View", icon='VIEW3D')
         col.separator()

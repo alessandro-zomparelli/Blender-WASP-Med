@@ -23,8 +23,9 @@ import numpy as np
 from math import sqrt, radians
 import random
 
-class smooth_weight(bpy.types.Operator):
-    bl_idname = "object.smooth_weight"
+'''
+class WASPMED_OT_smooth_weight(bpy.types.Operator):
+    #bl_idname = "object.WASPMED_OT_smooth_weight"
     bl_label = "Smooth Weight"
     bl_description = ("")
     bl_options = {'REGISTER', 'UNDO'}
@@ -47,9 +48,10 @@ class smooth_weight(bpy.types.Operator):
         bpy.ops.object.vertex_group_smooth(factor=self.factor, repeat=self.repeat, expand=self.expand)
         context.object.data.use_paint_mask_vertex = False
         return {'FINISHED'}
+'''
 
-class weight_thickness(bpy.types.Operator):
-    bl_idname = "object.weight_thickness"
+class OBJECT_OT_wm_weight_thickness(bpy.types.Operator):
+    bl_idname = "object.wm_weight_thickness"
     bl_label = "Weight Thickness"
     bl_description = ("")
     bl_options = {'REGISTER', 'UNDO'}
@@ -340,8 +342,8 @@ class weight_thickness(bpy.types.Operator):
 
         return {'FINISHED'}
 
-class set_weight_paint(bpy.types.Operator):
-    bl_idname = "object.set_weight_paint"
+class OBJECT_OT_wm_set_weight_paint(bpy.types.Operator):
+    bl_idname = "object.wm_set_weight_paint"
     bl_label = "Weight Paint"
     bl_description = ("")
     bl_options = {'REGISTER', 'UNDO'}
@@ -372,7 +374,7 @@ class View3DPaintPanel(UnifiedPaintPanel):
 
 ### END Sculpt Tools ###
 
-class waspmed_generate_panel(View3DPaintPanel, bpy.types.Panel):
+class WASPMED_PT_generate(View3DPaintPanel, bpy.types.Panel):
     bl_label = "Generate"
     bl_category = "Waspmed"
     bl_space_type = "VIEW_3D"
@@ -409,7 +411,7 @@ class waspmed_generate_panel(View3DPaintPanel, bpy.types.Panel):
             self.prop_unified_size(col, context, brush, "size", slider=True, text="Radius")
             self.prop_unified_strength(col, context, brush, "strength", text="Strength")
         else:
-            col.operator("object.set_weight_paint", icon="BRUSH_DATA")
+            col.operator("object.wm_set_weight_paint", icon="BRUSH_DATA")
 
         col.separator()
 
@@ -421,8 +423,8 @@ class waspmed_generate_panel(View3DPaintPanel, bpy.types.Panel):
         #col.operator("view3d.ruler", text="Ruler", icon="ARROW_LEFTRIGHT")
         if context.mode == 'OBJECT':
             col.separator()
-            col.operator("object.add_measure_plane", text="Add Measure Plane", icon='MESH_PLANE')
-            col.operator("object.measure_circumference", text="Measure Circumference", icon='DRIVER_DISTANCE')
+            col.operator("object.wm_add_measure_plane", text="Add Measure Plane", icon='MESH_PLANE')
+            col.operator("object.wm_measure_circumference", text="Measure Circumference", icon='DRIVER_DISTANCE')
         col.separator()
         col.operator("screen.region_quadview", text="Toggle Quad View", icon='VIEW3D')
         col.separator()

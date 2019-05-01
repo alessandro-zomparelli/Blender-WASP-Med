@@ -24,7 +24,7 @@ from math import sqrt, radians
 import random
 
 
-class waspmed_print_panel(bpy.types.Panel):
+class WASPMED_PT_print(bpy.types.Panel):
 #class waspmed_scan_panel(, bpy.types.View3DPaintPanel):
     bl_label = "Print"
     bl_category = "Waspmed"
